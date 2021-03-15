@@ -47,6 +47,7 @@ function addItem(e) {
     for the rowCreate function*/
     let title = item.querySelector('.product-title').innerText;
     let price = item.querySelector('.product-price').innerText.replace("€", "");
+    // let stock = item.querySelector('product-stock').innerText;
     let picSrc = item.querySelector('.product-image').src;
     // console.log(title, price, picSrc);
     rowCreate(title, price, picSrc);
@@ -84,6 +85,8 @@ function rowCreate(title, price, picSrc) {
         </div>
         
         <span class="cart-price col-3 h4 my-3">€ ${price}</span>
+
+  
        
         <div class="cart-qtty-action col-3 d-flex">            
             <i class="minus fa fa-minus-circle my-auto" ></i>            
@@ -113,7 +116,7 @@ function updateTotalPrice() {
         let price = parseFloat(cartRow.getElementsByClassName("cart-price")[0].innerText.replace("€", ""));//we need the first one
         let qtt = Number(cartRow.getElementsByClassName("cart-quantity")[0].innerText);
         console.log(price, qtt);
-        totalQtt += qtt;
+        totalQtt += qtt;//add total to zero
         totalPrice += (price * qtt);//add total to zero
         console.log(totalPrice);
     }
@@ -135,9 +138,65 @@ function updateTotalPrice() {
         totalElementPrice.innerHTML = "€" + totalWithDisc;
         elementDisc.innerHTML = "€" + discAmount;
 
+    } else {
+        elementDisc.innerHTML = "€" + 0;
+        elementDisc.setAttribute("class",d-none);
+
     }
 }
 
+
+
+
+
+
+// 6. increase qtt of item with + Button
+function plusQtt(e) {
+    let itemPlus = e.target.parentElement;
+    //Element to target
+    //change value in element to float
+    let qtt = Number(itemPlus.querySelector('.cart-quantity').innerHTML);
+    //insert number of quantity and insert it in el.
+    itemPlus.querySelector('.cart-quantity').innerHTML = qtt + 1;
+    console.log(qtt);
+    updateTotalPrice();
+}
+
+
+// 8. decrease qtt of item with - Button
+function minusQtt(e) {
+    let itemMinus = e.target.parentElement.parentElement;
+    //Element to target
+    //change value in element to float
+    let qtt = Number(itemMinus.querySelector('.cart-quantity').innerHTML);
+    /*it throws a message to the console if you try to decrease when it is already 1 unit.*/
+    if (qtt == 1) {
+        console.log("There shouldn't be 0 products in the cart");
+        // delItem(e);
+    //otherwise number of Quantity will be decreased    
+    } else {
+        itemMinus.querySelector('.cart-quantity').innerHTML = qtt - 1;
+        console.log(qtt);
+        updateTotalPrice();
+    }
+}
+// 11. Func to delete
+function delItem(e) {
+    let delBtnAction = e.target.parentElement.parentElement.remove();
+    //Element to target
+    updateTotalPrice();
+}
+
+function purchase() {
+    alert("Thank you for buying with us.");
+    let cartItems = document.getElementById('cart-items');
+    console.log(cartItems);
+    while (cartItems.hasChildNodes()) {
+        cartItems.removeChild(cartItems.firstChild);
+    }
+    // cartItems.innerHTML = "";
+    updateTotalPrice();
+}
 
 
 
