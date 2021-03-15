@@ -106,7 +106,7 @@ function updateTotalPrice() {
     let cartRows = cart.getElementsByClassName("cart-row");/*find el. to target for loop*/
     let totalPrice = 0; // it will be calculated from zero each time it is updated
     /* looping through each item and multiplying quantities from each item for its prices and adding them all together*/
-    let totalQtt = 0;
+    let totalQtt = 0;// added for Quantity total
     for (let i = 0; i < cartRows.length; i++) {
         let cartRow = cartRows[i];//variable to store value from element
         /*get value from text in element cart-price*/
@@ -125,9 +125,16 @@ function updateTotalPrice() {
     //add Result of totalQtt to total-el-qtt
     let totalElementQtt = document.getElementById("total").querySelector('#qtt');
     totalElementQtt.innerHTML = totalQtt;
-    let discount = 0.9;
+
+    let discount = 0.9;// 10% discount
+    let totalWithDisc = (totalPrice * discount).toFixed(2);//total price - discount
+    let discAmount = (totalPrice - totalWithDisc).toFixed(2);//amount reduced from total 
+    let elementDisc = document.getElementById("total").querySelector('#discount')
     if (totalPrice >= 50){
-        totalElementPrice.innerHTML = "€" + totalPrice * discount;
+        
+        totalElementPrice.innerHTML = "€" + totalWithDisc;
+        elementDisc.innerHTML = "€" + discAmount;
+
     }
 }
 
