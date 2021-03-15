@@ -50,11 +50,24 @@ function rowCreate(title, price, picSrc) {
     let cartItems = document.getElementById('cart-items');
     let cartItemsNames = cartItems.getElementsByClassName('cart-item-title');
     let cartItemQtt = cartItems.getElementsByClassName('cart-quantity');
+    let availability = Math.floor((Math.random() * 5) + 1);
+    let actualAvailability = cartItems.querySelector('.cart-availability');
+    
     for (let i = 0; i < cartItemsNames.length; i++) {
+        let qtt = Number(cartItemQtt[i].innerHTML);
+        actualAvailability = Number(actualAvailability.innerHTML);
+        console.log(qtt);
+        console.log(actualAvailability);
+
         if (cartItemsNames[i].innerText == title) {
-            //alert("This item already exists in your cart");
-            let qtt = Number(cartItemQtt[i].innerHTML);
-            cartItemQtt[i].innerHTML = qtt + 1;
+
+            
+            if (actualAvailability > qtt) {
+                cartItemQtt[i].innerHTML = qtt + 1;
+            } else {
+                alert("It's only " + qtt + " flower(s) available");
+            }
+
             console.log(qtt);
             updateTotal();
             return;//it will stop our script
@@ -62,6 +75,8 @@ function rowCreate(title, price, picSrc) {
         }
 
     }
+
+    
     let item = `
     <div class="cart-row row d-flex ">
         <div class="cart-item col-4 my-3 ">
@@ -78,7 +93,7 @@ function rowCreate(title, price, picSrc) {
             <button class="del btn btn-danger rounded-circle  my-auto ms-3 fw-bold" type="button"> X </button>            
         </div>
 
-        <span class="cart-availability col-2 h4 my-3">10</span>
+        <span class="cart-availability col-2 h4 my-3">${availability}</span>
     </div>`;
     let cart = document.getElementById('cart-items');
     cart.innerHTML += item;
@@ -90,6 +105,7 @@ function updateTotal() {
     let cartRows = cart.getElementsByClassName("cart-row");
     let total = 0; // it will be calculated from zero each time it is updated
     let quantItems = 0;
+    let discountPrice = 0;
 
     for (let i = 0; i < cartRows.length; i++) {
         let cartRow = cartRows[i];
@@ -97,25 +113,42 @@ function updateTotal() {
         let qtt = Number(cartRow.getElementsByClassName("cart-quantity")[0].innerText);
         //console.log(price, qtt);
         total += (price * qtt); 
+        if (total >= 10) {
+            discountPrice += total * 0.9;
+        } else {
+            discountPrice = 0;
+        }
         quantItems += qtt;
-        console.log(quantItems);
-        console.log(total);
+        //console.log(quantItems);
+        //console.log(total); 
     }
     
     //console.log(cartRows.length);
-    total = total.toFixed(2);//toFixed() will help rounding the number to 2 decimals
+    total = total.toFixed(2);     //toFixed() will help rounding the number to 2 decimals
+    discountPrice = discountPrice.toFixed(2);
+
     let totalElement = document.getElementById("total").querySelector('#price');
     let totalItems = document.getElementById("total").querySelector('#total-item');
+    let totalDiscountPrice = document.getElementById("total").querySelector('#discount');
     // alternative let totalElement = document.getElementById("price");
 
     totalElement.innerHTML = "€" + total;
     totalItems.innerHTML = quantItems;
+    totalDiscountPrice.innerHTML = "€" + discountPrice;
 }
 
 function plusQtt(e) {
     let itemPlus = e.target.parentElement;
+    let itemPlus2 = e.target.parentElement.parentElement; //added to target availability
     let qtt = Number(itemPlus.querySelector('.cart-quantity').innerHTML);
-    itemPlus.querySelector('.cart-quantity').innerHTML = qtt + 1;
+
+    let availability = Number(itemPlus2.querySelector('.cart-availability').innerHTML); // added
+    if (availability > qtt) {
+        itemPlus.querySelector('.cart-quantity').innerHTML = qtt + 1;
+    } else {
+        alert("It's only " + qtt + " flower(s) available");
+    }
+        
     console.log(qtt);
     updateTotal();
 }
