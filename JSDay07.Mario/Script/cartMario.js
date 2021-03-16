@@ -33,11 +33,11 @@ function documentReady() {
         let delBtn = delItemBtns[i];
         delBtn.addEventListener("click", delItem);
     }
-
+    //eigentlich muss es nicht rein, weil nur 1 Button, aber zur Sicherheit (no loop)
     let btnPurchase = document.getElementById("btn-purchase");
     btnPurchase.addEventListener("click", purchase);
 }
-documentReady();
+documentReady(); // function always called whwn refreshed the window
 
 /* 2. create function to add items to the cart*/
 function addItem(e) {
@@ -72,7 +72,8 @@ function rowCreate(title, price, picSrc) {
             cartItemQtt[i].innerHTML = qtt + 1;
             console.log(qtt);
             updateTotalPrice();
-            return;//it will stop our script
+            return;/*it will stop our script, otherwise, it will add a 2nd line 
+            same product*/
 
         }
 
@@ -172,7 +173,7 @@ function minusQtt(e) {
     /*it throws a message to the console if you try to decrease when it is already 1 unit.*/
     if (qtt == 1) {
         console.log("There shouldn't be 0 products in the cart");
-        // delItem(e);
+        delItem(e);//it will delete if 0 products?
     //otherwise number of Quantity will be decreased    
     } else {
         itemMinus.querySelector('.cart-quantity').innerHTML = qtt - 1;
