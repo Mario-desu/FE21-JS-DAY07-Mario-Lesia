@@ -1,10 +1,3 @@
-/*   
-let node = document.getElementById("container");
-node.addEventListener("click", function (e) {
-    //console.log(e.target.nodeName);
-});
-*/
-
 function documentReady() {
     let insertBtns = document.getElementsByClassName('product-button');
     for (let i = 0; i < insertBtns.length; i++) {
@@ -40,35 +33,34 @@ function addItem(e) {
     let title = item.querySelector('.product-title').innerText;
     let price = item.querySelector('.product-price').innerText.replace("€", "");
     let picSrc = item.querySelector('.product-image').src;
+    let availability = Math.floor((Math.random() * 5) + 1);
     // console.log(title, price, picSrc);
-    rowCreate(title, price, picSrc);
+    rowCreate(title, price, picSrc, availability);
     updateTotal();
 
 }
 
-function rowCreate(title, price, picSrc) {
+function rowCreate(title, price, picSrc, availability) {
     let cartItems = document.getElementById('cart-items');
     let cartItemsNames = cartItems.getElementsByClassName('cart-item-title');
     let cartItemQtt = cartItems.getElementsByClassName('cart-quantity');
-    let availability = Math.floor((Math.random() * 5) + 1);
-    let actualAvailability = cartItems.querySelector('.cart-availability');
+    let actualAvailability = cartItems.getElementsByClassName('cart-availability');
+
     
     for (let i = 0; i < cartItemsNames.length; i++) {
         let qtt = Number(cartItemQtt[i].innerHTML);
-        actualAvailability = Number(actualAvailability.innerHTML);
-        console.log(qtt);
-        console.log(actualAvailability);
 
         if (cartItemsNames[i].innerText == title) {
-
+            let avail = Number(actualAvailability[i].innerHTML);
+            console.log(qtt);
+            console.log(avail);
             
-            if (actualAvailability > qtt) {
+            if (avail > qtt) {
                 cartItemQtt[i].innerHTML = qtt + 1;
             } else {
                 alert("It's only " + qtt + " flower(s) available");
             }
 
-            console.log(qtt);
             updateTotal();
             return;//it will stop our script
 
@@ -114,7 +106,7 @@ function updateTotal() {
         //console.log(price, qtt);
         total += (price * qtt); 
         if (total >= 10) {
-            discountPrice += total * 0.9;
+            discountPrice = total * 0.9;
         } else {
             discountPrice = 0;
         }
