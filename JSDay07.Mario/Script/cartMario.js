@@ -6,7 +6,7 @@
 
 function documentReady() {
     /*1. select all buttons  with a loop, which add elements to cart (by click),
-    add event (function add Item) */
+    add event (function add Item) (addItem-Button)*/
     let insertBtns = document.getElementsByClassName('product-button');
     for (let i = 0; i < insertBtns.length; i++) {
         let insertBtn = insertBtns[i];
