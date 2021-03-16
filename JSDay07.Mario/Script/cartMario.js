@@ -6,7 +6,7 @@
 
 function documentReady() {
     /*1. select all buttons  with a loop, which add elements to cart (by click),
-    add event (function add Item) */
+    add event (function add Item) (addItem-Button)*/
     let insertBtns = document.getElementsByClassName('product-button');
     for (let i = 0; i < insertBtns.length; i++) {
         let insertBtn = insertBtns[i];
@@ -33,11 +33,11 @@ function documentReady() {
         let delBtn = delItemBtns[i];
         delBtn.addEventListener("click", delItem);
     }
-
+    //eigentlich muss es nicht rein, weil nur 1 Button, aber zur Sicherheit (no loop)
     let btnPurchase = document.getElementById("btn-purchase");
     btnPurchase.addEventListener("click", purchase);
 }
-documentReady();
+documentReady(); // function always called whwn refreshed the window
 
 /* 2. create function to add items to the cart*/
 function addItem(e) {
@@ -72,7 +72,8 @@ function rowCreate(title, price, picSrc) {
             cartItemQtt[i].innerHTML = qtt + 1;
             console.log(qtt);
             updateTotalPrice();
-            return;//it will stop our script
+            return;/*it will stop our script, otherwise, it will add a 2nd line 
+            same product*/
 
         }
 
@@ -109,14 +110,14 @@ function updateTotalPrice() {
     let cartRows = cart.getElementsByClassName("cart-row");/*find el. to target for loop*/
     let totalPrice = 0; // it will be calculated from zero each time it is updated
     /* looping through each item and multiplying quantities from each item for its prices and adding them all together*/
-    let totalQtt = 0;// added for Quantity total
+    let totalQtt = 0;// 1. added for Quantity total
     for (let i = 0; i < cartRows.length; i++) {
         let cartRow = cartRows[i];//variable to store value from element
         /*get value from text in element cart-price*/
         let price = parseFloat(cartRow.getElementsByClassName("cart-price")[0].innerText.replace("€", ""));//we need the first one
         let qtt = Number(cartRow.getElementsByClassName("cart-quantity")[0].innerText);
         console.log(price, qtt);
-        totalQtt += qtt;//add total to zero
+        totalQtt += qtt;//2.add total to zero
         totalPrice += (price * qtt);//add total to zero
         console.log(totalPrice);
     }
@@ -126,7 +127,7 @@ function updateTotalPrice() {
     // console.log(total);
     totalElementPrice.innerHTML = "€" + totalPrice;
     //add Result of totalQtt to total-el-qtt
-    let totalElementQtt = document.getElementById("total").querySelector('#qtt');
+    let totalElementQtt = document.getElementById("total").querySelector('#qtt');//3.select element
     totalElementQtt.innerHTML = totalQtt;
 
     let discount = 0.9;// 10% discount
@@ -137,10 +138,10 @@ function updateTotalPrice() {
         
         totalElementPrice.innerHTML = "€" + totalWithDisc;
         elementDisc.innerHTML = "€" + discAmount;
-
+        
     } else {
-        elementDisc.innerHTML = "€" + 0;
-        elementDisc.setAttribute("class",d-none);
+        elementDisc.innerHTML = "€" + 0.00;
+        
 
     }
 }
@@ -172,7 +173,7 @@ function minusQtt(e) {
     /*it throws a message to the console if you try to decrease when it is already 1 unit.*/
     if (qtt == 1) {
         console.log("There shouldn't be 0 products in the cart");
-        // delItem(e);
+        delItem(e);//it will delete if 0 products?
     //otherwise number of Quantity will be decreased    
     } else {
         itemMinus.querySelector('.cart-quantity').innerHTML = qtt - 1;
